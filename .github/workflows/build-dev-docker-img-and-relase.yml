@@ -37,7 +37,7 @@ jobs:
           node-version: '20.x'
 
       - name: Yarn Clean Install
-        run: yarn install --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api install
 
       - name: Install Semantic Release
         run: yarn global add semantic-release @semantic-release/{git,exec,changelog}
@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make Build
-        run: yarn build --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api build
 
       - name: Get NPM Version
         id: package-version

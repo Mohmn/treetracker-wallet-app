@@ -2,8 +2,8 @@ name: CI for New Pull Requests
 
 on:
   pull_request:
-    branches-ignore:
-      - '**'
+    branches:
+      - "*"
 
 jobs:
   check-api-changes:
@@ -37,13 +37,13 @@ jobs:
           node-version: '18.x'
 
       - name: Install dependencies for specific package
-        run: yarn install --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api install
 
       - name: Build TypeScript project
-        run: yarn build --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api build
 
       - name: Lint code with ESLint
-        run: yarn lint --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api lint
 
       - name: Run tests
-        run: yarn test --cwd apps/user
+        run: yarn workspace greenstand-wallet-app-api test
