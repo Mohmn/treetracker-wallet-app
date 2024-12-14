@@ -1,0 +1,110 @@
+name: Service CI/CD Pipeline to Release and Deploy to Dev Env
+
+on:
+  push:
+    branches:
+      - feat/api-devops-test
+
+jobs:
+  check-api-changes:
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for changes in API
+        id: check_changes
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep '^apps/user/'; then
+            echo "API_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "API_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+  release:
+    if: |
+      env.API_CHANGED == 'true' && !contains(github.event.head_commit.message, 'skip-ci')
+    name: Build and Release Docker Image
+    needs: check-api-changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+    
+      - name: Yarn Clean Install
+        run: yarn install --frozen-lockfile
+
+      - name: Install Semantic Release
+        run: yarn global add semantic-release @semantic-release/{git,exec,changelog}
+
+      - name: Semantic Release
+        run: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Make Build
+        run: yarn build
+
+      - name: Get NPM Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        id: docker_build_release
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./appp/user/Dockerfile
+          push: true
+          tags: mohmin/treetracker-wallet-monorepo-user-api:${{ steps.package-version.outputs.current-version }}
+
+    outputs:
+      bumped_version: ${{ steps.package-version.outputs.current-version }}
+
+  deploy:
+    if: |
+      needs.release.result == 'success' && !contains(github.event.head_commit.message, 'skip-ci')
+    name: Deploy to Dev Environment
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+
+      - name: Update Kustomize Image
+        run: |
+          (cd deployment/base && ../../kustomize edit set image mohmin/treetracker-like:${{ needs.release.outputs.bumped_version }})
+
+      - name: Install DigitalOcean CLI
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DEV_DIGITALOCEAN_TOKEN }}
+
+      - name: Save Kubernetes Config
+        run: doctl kubernetes cluster kubeconfig save ${{ secrets.DEV_CLUSTER_NAME }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          kustomize build deployment/overlays/development | \
+          kubectl apply -n ${{ secrets.K8S_NAMESPACE }} --wait -f -

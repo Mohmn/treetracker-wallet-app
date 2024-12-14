@@ -1,0 +1,6 @@
+deployment
+node_modules
+dist
+.git
+.cache
+.env
