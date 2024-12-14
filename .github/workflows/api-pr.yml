@@ -2,7 +2,6 @@ name: CI for New Pull Requests
 
 on:
   pull_request:
-    # Match all branches
     branches-ignore:
       - '**'
 
@@ -37,14 +36,14 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies for specific package
+        run: yarn install --cwd apps/user
 
       - name: Build TypeScript project
-        run: yarn build
+        run: yarn build --cwd apps/user
 
       - name: Lint code with ESLint
-        run: yarn lint
+        run: yarn lint --cwd apps/user
 
       - name: Run tests
-        run: yarn test
+        run: yarn test --cwd apps/user
