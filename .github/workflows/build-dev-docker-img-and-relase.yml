@@ -9,7 +9,7 @@ jobs:
   check-api-changes:
     runs-on: ubuntu-latest
     outputs:
-      api-changed: ${{ steps.check_changes.outputs.API_CHANGED }}
+      API_CHANGED: ${{ steps.check_changes.outputs.API_CHANGED }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
           fi
 
   release:
-    if: ${{ needs.check-api-changes.outputs.api-changed == 'true' }} && !contains(github.event.head_commit.message, 'skip-ci')
+    if: ${{ needs.check-api-changes.outputs.API_CHANGED == 'true' }} && !contains(github.event.head_commit.message, 'skip-ci')
     name: Build and Release Docker Image
     needs: check-api-changes
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
         with:
-          path: app/user
+          path: apps/user
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./
-          file: ./appp/user/Dockerfile
+          file: ./apps/user/Dockerfile
           push: true
           tags: mohmin/treetracker-wallet-monorepo-user-api:${{ steps.package-version.outputs.current-version }}
 
