@@ -22,6 +22,11 @@ jobs:
           else
             echo "API_CHANGED=false" >> $GITHUB_OUTPUT
           fi
+            - name: Log API_CHANGED status
+      - name: Log API_CHANGED status
+        run: |
+          echo "API_CHANGED status: ${{ needs.check-api-changes.outputs.API_CHANGED }}"
+
 
   test:
     if: ${{ needs.check-api-changes.outputs.API_CHANGED == 'true' }}
