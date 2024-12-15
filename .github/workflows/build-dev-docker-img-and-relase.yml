@@ -95,7 +95,7 @@ jobs:
 
       - name: Update Kustomize Image
         run: |
-          (cd apps/user/deployment/base && ../../kustomize edit set image mohmin/treetracker-wallet-monorepo-user-api:${{ needs.release.outputs.bumped_version }})
+          (cd apps/user/deployment/base && kustomize edit set image mohmin/treetracker-wallet-monorepo-user-api:${{ needs.release.outputs.bumped_version }})
 
       - name: Install DigitalOcean CLI
         uses: digitalocean/action-doctl@v2
