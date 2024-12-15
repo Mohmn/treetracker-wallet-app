@@ -9,7 +9,6 @@ on:
 
 jobs:
   test:
-    if: ${{ needs.check-api-changes.outputs.API_CHANGED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
