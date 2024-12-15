@@ -95,7 +95,7 @@ jobs:
 
       - name: Update Kustomize Image
         run: |
-          (cd deployment/base && ../../kustomize edit set image mohmin/treetracker-like:${{ needs.release.outputs.bumped_version }})
+          (cd apps/user/deployment/base && ../../kustomize edit set image mohmin/treetracker-wallet-monorepo-user-api:${{ needs.release.outputs.bumped_version }})
 
       - name: Install DigitalOcean CLI
         uses: digitalocean/action-doctl@v2
@@ -107,5 +107,5 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kustomize build deployment/overlays/development | \
+          kustomize build apps/user/deployment/overlays/development | \
           kubectl apply -n ${{ secrets.K8S_NAMESPACE }} --wait -f -
