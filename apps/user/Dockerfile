@@ -4,10 +4,9 @@ ENV PATH=/app/node_modules/.bin:$PATH
 COPY package.json ./
 RUN yarn install --silent 
 COPY . .
+RUN ls -la 
 RUN yarn build
 RUN yarn install --production --ignore-scripts --prefer-offline
-RUN ls
-
 FROM node:18-alpine AS prod
 WORKDIR /app
 COPY --from=builder app/dist/ ./dist
