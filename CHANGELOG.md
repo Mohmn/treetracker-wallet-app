@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Mohmn/treetracker-wallet-app/compare/v1.0.0...v1.1.0) (2024-12-26)
+
+
+### Features
+
+* test ([fd4b89a](https://github.com/Mohmn/treetracker-wallet-app/commit/fd4b89a948b59b386f0566b9c55a9f71be1d69cc))
+
 # 1.0.0 (2024-12-21)
 
 
