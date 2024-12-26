@@ -4,7 +4,7 @@ name: Service CI/CD Pipeline to Release and Deploy to Dev Env
 on:
   push:
     branches:
-      - main
+      - feat/semantic-version
     paths:
       - 'apps/user/**'  # Only trigger for changes in the apps/user directory
 
