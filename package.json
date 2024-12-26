@@ -1,6 +1,6 @@
 {
   "name": "treetracker-wallet-app",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "repository": "",
   "author": "",
@@ -27,6 +27,7 @@
     "@commitlint/config-conventional": "^19.2.2",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.11",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "semantic-release": "19.0.2"
   }
 }
