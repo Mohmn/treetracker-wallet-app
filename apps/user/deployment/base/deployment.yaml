@@ -26,7 +26,7 @@ spec:
                       - microservices-node-pool
       containers:
         - name: treetracker-wallet-monorepo-user-api
-          image: greenstand/treetracker-wallet-monorepo-user-api:TAG
+          image: mohmin/treetracker-wallet-monorepo-user-api:TAG
           # get this from env as well
           ports:
             - containerPort: 8080

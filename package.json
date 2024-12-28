@@ -1,7 +1,7 @@
 {
   "private": "true",
   "name": "treetracker-wallet-app",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "repository": "",
   "author": "",
@@ -23,7 +23,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@semantic-release/changelog": "^6.0.3",
     "husky": "^9.0.11",
     "semantic-release": "19.0.2",
     "semantic-release-monorepo": "^8.0.2"

@@ -62,7 +62,7 @@ jobs:
           context: ./apps/user/ 
           file: ./apps/user/Dockerfile
           push: true
-          tags: greenstand/treetracker-wallet-monorepo-user-api:${{ steps.package-version.outputs.current-version }}
+          tags: mohmin/treetracker-wallet-monorepo-user-api:${{ steps.package-version.outputs.current-version }}
 
     outputs:
       bumped_version: ${{ steps.package-version.outputs.current-version }}
