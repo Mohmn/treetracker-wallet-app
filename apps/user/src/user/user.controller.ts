@@ -13,6 +13,6 @@ export class UserController {
 
   @Get('test')
   check(@Body() registerUserDto: RegisterUserDto) {
-    return 'tree growing!!!@dd#mdd@fs';
+    return 'tree growing!!!@dd#md';
   }
 }
