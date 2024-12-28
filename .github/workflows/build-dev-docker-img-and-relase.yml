@@ -26,7 +26,7 @@ jobs:
         run: yarn workspace greenstand-wallet-app-api install
 
       - name: Install Semantic Release
-        run: yarn global add semantic-release @semantic-release/{git,exec,changelog}
+        run: yarn  add semantic-release @semantic-release/{git,exec,changelog} -W
 
       - name: Semantic Release
         run: semantic-release
